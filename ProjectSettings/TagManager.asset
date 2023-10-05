@@ -6,6 +6,7 @@ TagManager:
   tags:
   - ColliderInterior
   - Alimento
+  - Camara
   layers:
   - Default
   - TransparentFX
@@ -15,8 +16,8 @@ TagManager:
   - UI
   - Agentes
   - Bordes
-  - 
-  - 
+  - Camara
+  - Interior
   - 
   - 
   - 
