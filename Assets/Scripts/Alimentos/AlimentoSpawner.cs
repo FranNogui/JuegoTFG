@@ -5,15 +5,19 @@ using UnityEngine;
 
 public class AlimentoSpawner : MonoBehaviour
 {
+    [SerializeField] GameObject almacenAlimentos;
     GameObject[] alimentos;
     [SerializeField] GameObject alimento;
-    [SerializeField] int maxAlimentos;
+    public int maxAlimentos;
     [SerializeField] float minDelay;
     [SerializeField] float maxDelay;
 
     int numAlimentos;
-    Vector2 minPos = new Vector2 (-25.0f, -25.0f);
-    Vector2 maxPos = new Vector2 (25.0f, 25.0f);
+    Vector2 minPos;
+    Vector2 maxPos;
+
+    public Vector2 MinPos { set { minPos = value; } }
+    public Vector2 MaxPos { set { maxPos = value; } }
 
     private void Start()
     {
@@ -21,6 +25,7 @@ public class AlimentoSpawner : MonoBehaviour
         for (int i = 0; i < maxAlimentos; i++)
         {
             alimentos[i] = GameObject.Instantiate(alimento);
+            alimentos[i].transform.parent = almacenAlimentos.transform;
             alimentos[i].GetComponent<AlimentoControlador>().AlimentoSpawner = this;
             alimentos[i].GetComponent<AlimentoControlador>().ID = i;
             alimentos[i].SetActive(false);
@@ -48,7 +53,6 @@ public class AlimentoSpawner : MonoBehaviour
             }
 
             float delay = Mathf.Clamp((float) numAlimentos / maxAlimentos, 0.0f, 1.0f) * (maxDelay - minDelay) + minDelay;
-            Debug.Log(delay);
             yield return new WaitForSeconds(delay);
         }
     }

@@ -6,9 +6,12 @@ public class AlimentoControlador : MonoBehaviour
 {
     [SerializeField] GameObject alimento;
     [SerializeField] SpriteRenderer render;
-    [SerializeField] float volumenMinimo = 0.1f;
+    [SerializeField] float volumenMinimo = 1.0f;
     [SerializeField] float volumenMaximo = 2.0f;
+    [SerializeField] float tamanyoPaso = 1.0f;
     public float volumen;
+
+    bool comido;
 
     AlimentoSpawner alimentoSpawner;
     int id;
@@ -27,24 +30,28 @@ public class AlimentoControlador : MonoBehaviour
     private void Start()
     {
         volumen = Random.Range(volumenMinimo, volumenMaximo);
-        alimento.transform.localScale = Vector3.one * volumen;
+        alimento.transform.localScale = Vector3.one + Vector3.one * volumen * tamanyoPaso;
         render.color = ObtenerColorAleatorio();
+        comido = false;
     }
 
     public void Randomizar()
     {
         volumen = Random.Range(volumenMinimo, volumenMaximo);
-        alimento.transform.localScale = Vector3.one * volumen;
+        alimento.transform.localScale = Vector3.one + Vector3.one * volumen * tamanyoPaso;
         render.color = ObtenerColorAleatorio();
+        comido = false;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (comido) return;
         AgenteControlador ag = collision.gameObject.GetComponent<AgenteControlador>();
         if (ag != null && ag.Volumen >= volumen) 
         {
+            comido = true;
             ag.AumentarTamanyo(volumen);
-            StartCoroutine(Destruir());
+            StartCoroutine(Destruir(collision.transform));
         }
     }
 
@@ -72,9 +79,34 @@ public class AlimentoControlador : MonoBehaviour
         return new Color(r, g, b, 1.0f);
     }
 
-    IEnumerator Destruir()
+    IEnumerator Destruir(Transform posAgente)
     {
-        yield return 0;
-        alimentoSpawner.DestruirAlimento(id);
+        float distancia = (transform.position - posAgente.position).magnitude;
+        while (true)
+        {
+            if (transform.localScale.x > 0.1f)
+            {
+                transform.localScale = Vector3.Lerp(transform.localScale, Vector3.zero, 1.0f * Time.deltaTime);
+                distancia = distancia - 2.0f * Time.deltaTime;
+                float distanciaNueva = (transform.position - posAgente.position).magnitude;
+                if (distanciaNueva <= distancia)
+                {
+                    distancia = distanciaNueva;
+                }
+                else
+                {
+                    if (distancia < 0.0f) distancia = 0.0f;
+                    Vector2 vec = (transform.position - posAgente.position).normalized * distancia;
+                    transform.position = new Vector2(posAgente.position.x + vec.x, posAgente.position.y + vec.y);
+                }  
+            }
+            else
+            {
+                alimentoSpawner.DestruirAlimento(id);
+                break;
+            }
+            yield return null;
+        }
+        yield break;
     }
 }

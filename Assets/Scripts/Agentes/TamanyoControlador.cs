@@ -6,6 +6,10 @@ public class TamanyoControlador : MonoBehaviour
 {
     [SerializeField] float tamanyoActual;
     [SerializeField] float tamanyoPaso;
+    bool eliminado = false;
+
+    public bool Eliminado
+    { set { eliminado = value; } }
 
     public float TamanyoActual
     {
@@ -14,6 +18,7 @@ public class TamanyoControlador : MonoBehaviour
 
     private void Update()
     {
+        if (eliminado) { return; }
         this.gameObject.transform.localScale = Vector2.Lerp(this.gameObject.transform.localScale, Vector3.one + Vector3.one * (tamanyoPaso * tamanyoActual), 1.0f * Time.deltaTime);
     }
 

@@ -5141,6 +5141,11 @@ MonoBehaviour:
   imagenHumano: {fileID: 21300000, guid: 31913aca3136b4449ada36d77e6508b4, type: 3}
   imagenComputador: {fileID: 21300000, guid: f58123a1b4dd0054eb0b838f76ad4f37, type: 3}
   menuOpciones: {fileID: 1780683909}
+  info: {fileID: 11400000, guid: 74caaee9c76ce764ca2984e8532bc574, type: 2}
+  sliderJugadores: {fileID: 1990850786}
+  pequenyo: {fileID: 1292618489}
+  mediano: {fileID: 158396730}
+  grande: {fileID: 1092279336}
 --- !u!4 &938934992
 Transform:
   m_ObjectHideFlags: 0

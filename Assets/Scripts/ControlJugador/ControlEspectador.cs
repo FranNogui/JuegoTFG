@@ -45,15 +45,5 @@ public class ControlEspectador : MonoBehaviour
         {
             camara.orthographicSize--;
         }
-
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            menuOpcionesAnimator.SetBool("Abierto", !menuOpcionesAnimator.GetBool("Abierto"));
-        }
-    }
-
-    public void CerrarMenuOpcionesPulsado()
-    {
-        menuOpcionesAnimator.SetBool("Abierto", false);
     }
 }

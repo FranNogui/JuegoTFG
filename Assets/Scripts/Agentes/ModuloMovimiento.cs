@@ -2,14 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-enum TipoAgente
+public enum TipoAgente
 {
     Jugador, IA
 }
 
 public class ModuloMovimiento : MonoBehaviour
 {
-    [SerializeField] TipoAgente tipo = TipoAgente.IA;
+    [SerializeField] TipoAgente tipo;
+
+    public void CambiarA(TipoAgente nuevoTipo)
+    {
+        tipo = nuevoTipo;
+    }
 
     public Vector2 ActualizarMovimiento()
     {

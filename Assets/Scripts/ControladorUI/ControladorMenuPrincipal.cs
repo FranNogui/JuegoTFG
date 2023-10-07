@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class ControladorMenuPrincipal : MonoBehaviour
@@ -23,6 +25,14 @@ public class ControladorMenuPrincipal : MonoBehaviour
     [SerializeField] GameObject menuOpciones;
     Animator menuOpcionesAnimator;
 
+    [Header("Informacion del mapa")]
+    [SerializeField] InformacionMapa info;
+
+    [Header("Opciones de partida")]
+    [SerializeField] Slider sliderJugadores;
+    [SerializeField] Toggle pequenyo;
+    [SerializeField] Toggle mediano;
+    [SerializeField] Toggle grande;
 
 
     private void Start()
@@ -66,6 +76,7 @@ public class ControladorMenuPrincipal : MonoBehaviour
         menuJugarOpciones1.SetActive(false);
         menuJugarOpciones2.SetActive(true);
         imagenElegido.sprite = imagenHumano;
+        info.tipoPartida = TipoPartida.JVM;
     }
 
     public void MaquinaContraMaquinaPulsado()
@@ -73,6 +84,7 @@ public class ControladorMenuPrincipal : MonoBehaviour
         menuJugarOpciones1.SetActive(false);
         menuJugarOpciones2.SetActive(true);
         imagenElegido.sprite = imagenComputador;
+        info.tipoPartida = TipoPartida.MVM;
     }
 
     public void ActualizarNumeroJugadores(float nuevoNumero)
@@ -88,6 +100,12 @@ public class ControladorMenuPrincipal : MonoBehaviour
 
     public void AceptarPartidaPulsado()
     {
+        if      (pequenyo.isOn) info.tamanyo = TamanyoMapa.Pequenyo;
+        else if (mediano.isOn)  info.tamanyo = TamanyoMapa.Mediano;
+        else if (grande.isOn)   info.tamanyo = TamanyoMapa.Grande;
 
+        info.numJugadores = (int) sliderJugadores.value;
+
+        SceneManager.LoadScene("EscenaJuego");
     }
 }
