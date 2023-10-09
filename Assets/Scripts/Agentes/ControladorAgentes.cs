@@ -41,7 +41,7 @@ public class ControladorAgentes : MonoBehaviour
             bool valido = false;
             while (!valido)
             {
-                agentes[i].transform.position = new Vector3(Random.Range(minPos.x, maxPos.x), Random.Range(minPos.y, maxPos.y), 0.0f);
+                agentes[i].transform.position = new Vector3(Random.Range(minPos.x, maxPos.x), Random.Range(minPos.y, maxPos.y), -1.0f);
                 valido = true;
                 for (int j = i - 1; j >= 0; j--)
                 {
@@ -83,7 +83,7 @@ public class ControladorAgentes : MonoBehaviour
                 {
                     if (distancia < 0.0f) distancia = 0.0f;
                     Vector2 vec = (agentes[idEliminado].transform.position - agentes[idEliminador].transform.position).normalized * distancia;
-                    agentes[idEliminado].transform.position = new Vector2(agentes[idEliminador].transform.position.x + vec.x, agentes[idEliminador].transform.position.y + vec.y);
+                    agentes[idEliminado].transform.position = new Vector3(agentes[idEliminador].transform.position.x + vec.x, agentes[idEliminador].transform.position.y + vec.y, -1.0f);
                 }
             }
             else

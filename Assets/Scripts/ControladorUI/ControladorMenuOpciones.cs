@@ -29,6 +29,11 @@ public class ControladorMenuOpciones : MonoBehaviour
         menuOpcionesAnimator.SetBool("Abierto", true);
     }
 
+    public void CerrarPulsado()
+    {
+        menuOpcionesAnimator.SetBool("Abierto", false);
+    }
+
     public void CambiarNumeroAgentes(int nuevoNumero)
     { 
         numeroVivos.text = nuevoNumero.ToString();

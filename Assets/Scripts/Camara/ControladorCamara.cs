@@ -29,7 +29,7 @@ public class ControladorCamara : MonoBehaviour
         else
         {
             Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, new Vector3(agenteActual.transform.position.x, agenteActual.transform.position.y, -10), 0.2f);
-            Camera.main.orthographicSize = Mathf.Lerp(Camera.main.orthographicSize, agenteActual.transform.localScale.x + 2.0f, 1.0f * Time.deltaTime);
+            Camera.main.orthographicSize = Mathf.Lerp(Camera.main.orthographicSize, agenteActual.transform.localScale.x + 5.0f, 1.0f * Time.deltaTime);
         }
     }
 

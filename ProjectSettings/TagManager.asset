@@ -47,9 +47,15 @@ TagManager:
   - name: Fondo
     uniqueID: 4199329091
     locked: 0
+  - name: Sombra
+    uniqueID: 4195675
+    locked: 0
   - name: Alimento
     uniqueID: 373964213
     locked: 0
   - name: Agentes
     uniqueID: 2645386655
+    locked: 0
+  - name: Particulas
+    uniqueID: 3384190277
     locked: 0

@@ -39,7 +39,7 @@ public class MapaControlador : MonoBehaviour
                 bordesGrande.SetActive(false);
                 alimentoSpawner.MinPos = limiteMinMediano.position;
                 alimentoSpawner.MaxPos = limiteMaxMediano.position;
-                alimentoSpawner.maxAlimentos = 2500;
+                alimentoSpawner.maxAlimentos = 4000;
                 controladorAgentes.MinPos = limiteMinMediano.position;
                 controladorAgentes.MaxPos = limiteMaxMediano.position;
                 fondo.size = limiteMaxMediano.position - limiteMinMediano.position;
@@ -49,7 +49,7 @@ public class MapaControlador : MonoBehaviour
                 bordesMediano.SetActive(false);
                 alimentoSpawner.MinPos = limiteMinGrande.position;
                 alimentoSpawner.MaxPos = limiteMaxGrande.position;
-                alimentoSpawner.maxAlimentos = 4500;
+                alimentoSpawner.maxAlimentos = 8000;
                 controladorAgentes.MinPos = limiteMinGrande.position;
                 controladorAgentes.MaxPos = limiteMaxGrande.position;
                 fondo.size = limiteMaxGrande.position - limiteMinGrande.position;

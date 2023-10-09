@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bfb3965010517747a94e261fb7dbcc8, type: 3}
   m_Name: InfoMapa
   m_EditorClassIdentifier: 
-  tipoPartida: 0
-  tamanyo: 2
-  numJugadores: 80
+  tipoPartida: 1
+  tamanyo: 0
+  numJugadores: 50

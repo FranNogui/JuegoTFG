@@ -4,13 +4,19 @@ using UnityEngine;
 
 public class AgenteControlador : MonoBehaviour
 {
-    const int numRayCasts = 64;
+    const int numRayCasts = 256;
     RayCastObject[] objetos;
 
     [SerializeField] float velocidad = 1.0f;
     [SerializeField] float decVelocidadPorTamanyo = 0.001f;
     [SerializeField] float distanciaVision = 5.0f;
     [SerializeField] float margenVolumenPorcentual = 1.25f;
+
+    public float MargenVolumenPorcentual
+    {
+        get { return margenVolumenPorcentual; }
+    }
+
     float probabilidadParpadeo = 0.0f;
     float incProbParpadeo = 0.001f;
     float tamanyoProporcion = 1.0f;
@@ -24,6 +30,8 @@ public class AgenteControlador : MonoBehaviour
     Rigidbody2D body;
     ModuloMovimiento modMov;
     Animator animator;
+    ControladorSonidosAgente controladorSonidos;
+    Collider2D colision;
     
 
     float[] dirX = new float[numRayCasts];
@@ -47,17 +55,8 @@ public class AgenteControlador : MonoBehaviour
         get { return tamanyo.TamanyoActual + 1.0f; }
     }
 
-    void Start()
+    private void Awake()
     {
-        ojos = GetComponent<OjosControlador>();
-        tamanyo = GetComponent<TamanyoControlador>();
-        body = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
-        modMov = GetComponent<ModuloMovimiento>();
-        mov = Vector2.zero;
-        movPrev = mov;
-        eliminado = false;
-
         objetos = new RayCastObject[numRayCasts];
         for (int i = 0; i < numRayCasts; i++)
         {
@@ -66,6 +65,20 @@ public class AgenteControlador : MonoBehaviour
             objetos[i] = new RayCastObject();
             objetos[i].tipo = TipoObjeto.Nada;
         }
+    }
+
+    void Start()
+    {
+        ojos = GetComponent<OjosControlador>();
+        tamanyo = GetComponent<TamanyoControlador>();
+        body = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
+        modMov = GetComponent<ModuloMovimiento>();
+        controladorSonidos = GetComponent<ControladorSonidosAgente>();
+        colision = GetComponent<Collider2D>();
+        mov = Vector2.zero;
+        movPrev = mov;
+        eliminado = false;
 
         StartCoroutine(EjecutarRayCast());
     }
@@ -74,9 +87,9 @@ public class AgenteControlador : MonoBehaviour
     {
         if (eliminado) return;
         movPrev = mov;
-        mov = modMov.ActualizarMovimiento();
+        mov = modMov.ActualizarMovimiento(objetos);
         if (mov.magnitude > 1.0f) { mov.Normalize(); }
-        mov = Vector2.Lerp(mov, movPrev, 1.0f * Time.deltaTime);
+        mov = Vector2.Lerp(mov, movPrev, 0.5f * Time.deltaTime);
         ojos.ActualizarPosicion(mov);
         mov *= (velocidad * tamanyoProporcion);
         body.velocity = mov;
@@ -87,7 +100,7 @@ public class AgenteControlador : MonoBehaviour
     {
         while (!eliminado)
         {
-            yield return 20;
+            yield return 1;
             RayCasting();  
         }
     }
@@ -122,12 +135,14 @@ public class AgenteControlador : MonoBehaviour
     {
         eliminado = true;
         tamanyo.Eliminado = true;
+        colision.enabled = false;
+        controladorSonidos.ReproducirPop();
         controladorAgentes.EliminarAgente(id, idEliminador);
     }
 
     public void AumentarTamanyo(float volumen)
     {
-        tamanyo.CambiarTamanyo(volumen / transform.localScale.x);
+        tamanyo.CambiarTamanyo(volumen);
         tamanyoProporcion = (1 / (Mathf.Log(tamanyo.TamanyoActual * decVelocidadPorTamanyo + 1) + 1));
     }
 
@@ -164,7 +179,7 @@ public class AgenteControlador : MonoBehaviour
             hit[i] = Physics2D.Raycast(transform.position, dir, distanciaVision * transform.localScale.x / 2.0f);
             if (hit[i])
             {
-                Debug.DrawRay(transform.position, dir * hit[i].distance, Color.yellow);
+                //Debug.DrawRay(transform.position, dir * hit[i].distance, Color.yellow);
                 GameObject hitObject = hit[i].collider.gameObject;
                 if (hitObject.GetComponent<AgenteControlador>() != null)
                 {

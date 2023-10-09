@@ -18,7 +18,7 @@ public class RayCastObject
     }
 
     public TipoObjeto tipo;
-    public Vector2 posicion;
+    public Vector3 posicion;
     public float tamanyo;
     public float distancia;
 }

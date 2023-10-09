@@ -13,6 +13,7 @@ public class AlimentoControlador : MonoBehaviour
 
     bool comido;
 
+    AlimentoSonidos sonidos;
     AlimentoSpawner alimentoSpawner;
     int id;
 
@@ -27,8 +28,13 @@ public class AlimentoControlador : MonoBehaviour
         set { id = value; }
     }
 
-    private void Start()
+    Collider2D colision;
+
+    private void Awake()
     {
+        sonidos = GetComponent<AlimentoSonidos>();
+        colision = GetComponent<Collider2D>();
+
         volumen = Random.Range(volumenMinimo, volumenMaximo);
         alimento.transform.localScale = Vector3.one + Vector3.one * volumen * tamanyoPaso;
         render.color = ObtenerColorAleatorio();
@@ -41,6 +47,7 @@ public class AlimentoControlador : MonoBehaviour
         alimento.transform.localScale = Vector3.one + Vector3.one * volumen * tamanyoPaso;
         render.color = ObtenerColorAleatorio();
         comido = false;
+        colision.enabled = true;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -50,7 +57,9 @@ public class AlimentoControlador : MonoBehaviour
         if (ag != null && ag.Volumen >= volumen) 
         {
             comido = true;
+            colision.enabled = false;
             ag.AumentarTamanyo(volumen);
+            sonidos.ReproducirPop();
             StartCoroutine(Destruir(collision.transform));
         }
     }

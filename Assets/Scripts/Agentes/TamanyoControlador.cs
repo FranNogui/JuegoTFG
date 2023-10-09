@@ -19,7 +19,7 @@ public class TamanyoControlador : MonoBehaviour
     private void Update()
     {
         if (eliminado) { return; }
-        this.gameObject.transform.localScale = Vector2.Lerp(this.gameObject.transform.localScale, Vector3.one + Vector3.one * (tamanyoPaso * tamanyoActual), 1.0f * Time.deltaTime);
+        this.gameObject.transform.localScale = Vector2.Lerp(this.gameObject.transform.localScale, Vector3.one + Vector3.one * (Mathf.Sqrt(tamanyoPaso * tamanyoActual)), 1.0f * Time.deltaTime);
     }
 
     public void CambiarTamanyo(float cantidad)

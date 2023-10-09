@@ -32,6 +32,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Agente2
       objectReference: {fileID: 0}
+    - target: {fileID: 6100167155168843262, guid: 2de2fc23e4116fd47bed6937ef15fa99, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 3066b0aacf6c9d545a1e0a4b7c42ca2b, type: 3}
     - target: {fileID: 6698796187259631080, guid: 2de2fc23e4116fd47bed6937ef15fa99, type: 3}
       propertyPath: Ojos.Array.size
       value: 1
