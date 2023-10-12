@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class ControlEspectador : MonoBehaviour
@@ -18,6 +17,8 @@ public class ControlEspectador : MonoBehaviour
     [SerializeField] GameObject menuOpciones;
     Animator menuOpcionesAnimator;
 
+    public bool canZoom;
+
     private void Start()
     {
         cuerpo = GetComponent<Rigidbody2D>();
@@ -25,6 +26,7 @@ public class ControlEspectador : MonoBehaviour
         velocidad = velocidadNormal;
 
         menuOpcionesAnimator = menuOpciones.GetComponent<Animator>();
+        canZoom = true;
     }
 
     void Update()
@@ -37,11 +39,11 @@ public class ControlEspectador : MonoBehaviour
 
         cuerpo.velocity = mov * velocidad;
 
-        if (Input.GetAxis("Mouse ScrollWheel") > 0f && camara.orthographicSize < maxZoom)
+        if (Input.GetAxis("Mouse ScrollWheel") > 0f && camara.orthographicSize < maxZoom && canZoom)
         {
             camara.orthographicSize++;
         }
-        else if (Input.GetAxis("Mouse ScrollWheel") < 0f && camara.orthographicSize > minZoom)
+        else if (Input.GetAxis("Mouse ScrollWheel") < 0f && camara.orthographicSize > minZoom && canZoom)
         {
             camara.orthographicSize--;
         }

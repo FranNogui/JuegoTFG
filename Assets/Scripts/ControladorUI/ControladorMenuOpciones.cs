@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -8,6 +9,14 @@ using UnityEngine.UI;
 
 public class ControladorMenuOpciones : MonoBehaviour
 {
+    int[] resolucionAnchos = { 640, 1280, 1366, 1600, 1920, 2560, 3200, 3840, 5120, 7680 };
+    int[] resolucionAltos = { 360, 720, 768, 900, 1080, 1440, 1800, 2160, 2880, 4320 };
+    float[] velocidadPartida = { 1.0f, 1.5f, 2.0f, 2.5f, 3.0f };
+    int velocidadPartidaActual = 0;
+
+    [Header("Informacion de la partida")]
+    [SerializeField] InformacionMapa info;
+
     [Header("Menu de opciones")]
     [SerializeField] GameObject menuOpciones;
     [SerializeField] GameObject menuConfirmacion;
@@ -16,6 +25,8 @@ public class ControladorMenuOpciones : MonoBehaviour
     [SerializeField] TextMeshProUGUI musicaTexto;
     [SerializeField] TextMeshProUGUI SFXTexto;
     [SerializeField] AudioMixer mixer;
+    [SerializeField] Toggle pantallaCompleta;
+    [SerializeField] TMP_Dropdown resolucion;
     Animator menuOpcionesAnimator;
 
     [Header("Contador Entes")]
@@ -24,6 +35,10 @@ public class ControladorMenuOpciones : MonoBehaviour
     [Header("Menu Final Partida")]
     [SerializeField] GameObject menuFinalPartida;
     [SerializeField] TextMeshProUGUI textoFinalPartida;
+
+    [Header("Velocidad Partida")]
+    [SerializeField] GameObject botonAcelerar;
+    [SerializeField] TextMeshProUGUI textoVelocidad;
 
     private void Start()
     {
@@ -36,6 +51,14 @@ public class ControladorMenuOpciones : MonoBehaviour
         volumenSFX.value = PlayerPrefs.GetFloat("VolumenSFX");
         mixer.SetFloat("Sonidos", Mathf.Log10(PlayerPrefs.GetFloat("VolumenSFX")) * 20.0f);
         SFXTexto.text = (int)(PlayerPrefs.GetFloat("VolumenSFX") * 100.0f) + "%";
+
+        pantallaCompleta.isOn = PlayerPrefs.GetInt("PantallaCompleta") != 0;
+        Screen.fullScreen = pantallaCompleta.isOn;
+
+        resolucion.value = PlayerPrefs.GetInt("Resolucion");
+        Screen.SetResolution(resolucionAnchos[resolucion.value], resolucionAltos[resolucion.value], Screen.fullScreen);
+
+        if (info.tipoPartida == TipoPartida.JVM) botonAcelerar.SetActive(false);
     }
 
     private void Update()
@@ -103,5 +126,36 @@ public class ControladorMenuOpciones : MonoBehaviour
         PlayerPrefs.Save();
         mixer.SetFloat("Sonidos", Mathf.Log10(nuevoValor) * 20.0f);
         SFXTexto.text = (int)(nuevoValor * 100.0f) + "%";
+    }
+
+    public void CambiarPantallaCompleta(bool valor)
+    {
+        if (valor)
+        {
+            PlayerPrefs.SetInt("PantallaCompleta", 1);
+            PlayerPrefs.Save();
+        }
+        else
+        {
+            PlayerPrefs.SetInt("PantallaCompleta", 0);
+            PlayerPrefs.Save();
+        }
+        Screen.fullScreen = pantallaCompleta.isOn;
+    }
+
+    public void CambiarResolucion(Int32 valor)
+    {
+        PlayerPrefs.SetInt("Resolucion", valor);
+        PlayerPrefs.Save();
+
+        resolucion.value = PlayerPrefs.GetInt("Resolucion");
+        Screen.SetResolution(resolucionAnchos[resolucion.value], resolucionAltos[resolucion.value], Screen.fullScreen);
+    }
+
+    public void AcelerarPartida()
+    {
+        velocidadPartidaActual = (velocidadPartidaActual + 1) % velocidadPartida.Length;
+        Time.timeScale = velocidadPartida[velocidadPartidaActual];
+        textoVelocidad.text = "x" + Time.timeScale.ToString("0.0");
     }
 }

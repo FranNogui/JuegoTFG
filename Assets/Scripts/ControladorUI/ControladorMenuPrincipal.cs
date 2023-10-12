@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,9 @@ using UnityEngine.UI;
 
 public class ControladorMenuPrincipal : MonoBehaviour
 {
+    int[] resolucionAnchos = { 640, 1280, 1366, 1600, 1920, 2560, 3200, 3840, 5120, 7680 };
+    int[] resolucionAltos = { 360, 720, 768, 900, 1080, 1440, 1800, 2160, 2880, 4320 };
+
     [Header("Menu de juego")]
     [SerializeField] GameObject menuJugar;
     Animator   menuJugarAnimator;
@@ -29,6 +33,8 @@ public class ControladorMenuPrincipal : MonoBehaviour
     [SerializeField] TextMeshProUGUI musicaTexto;
     [SerializeField] TextMeshProUGUI SFXTexto;
     [SerializeField] AudioMixer mixer;
+    [SerializeField] Toggle pantallaCompleta;
+    [SerializeField] TMP_Dropdown resolucion;
     Animator menuOpcionesAnimator;
 
     [Header("Informacion del mapa")]
@@ -43,6 +49,7 @@ public class ControladorMenuPrincipal : MonoBehaviour
 
     private void Start()
     {
+        Time.timeScale = 1.0f;
         menuJugarAnimator  = menuJugar.GetComponent<Animator>();
         menuJugarOpciones1 = menuJugar.transform.Find("Opciones1").gameObject;
         menuJugarOpciones2 = menuJugar.transform.Find("Opciones2").gameObject;
@@ -56,6 +63,12 @@ public class ControladorMenuPrincipal : MonoBehaviour
         volumenSFX.value = PlayerPrefs.GetFloat("VolumenSFX");
         mixer.SetFloat("Sonidos", Mathf.Log10(PlayerPrefs.GetFloat("VolumenSFX")) * 20.0f);
         SFXTexto.text = (int)(PlayerPrefs.GetFloat("VolumenSFX") * 100.0f) + "%";
+
+        pantallaCompleta.isOn = PlayerPrefs.GetInt("PantallaCompleta") != 0;
+        Screen.fullScreen = pantallaCompleta.isOn;
+
+        resolucion.value = PlayerPrefs.GetInt("Resolucion");
+        Screen.SetResolution(resolucionAnchos[resolucion.value], resolucionAltos[resolucion.value], Screen.fullScreen);
 
         menuOpcionesAnimator = menuOpciones.GetComponent<Animator>();
     }
@@ -74,7 +87,7 @@ public class ControladorMenuPrincipal : MonoBehaviour
 
     public void SalirPulsado()
     {
-
+        Application.Quit();
     }
 
     public void CerrarMenuOpcionesPulsado()
@@ -139,5 +152,29 @@ public class ControladorMenuPrincipal : MonoBehaviour
         info.numJugadores = (int) sliderJugadores.value;
 
         SceneManager.LoadScene("EscenaJuego");
+    }
+
+    public void CambiarPantallaCompleta(bool valor)
+    {
+        if (valor)
+        {
+            PlayerPrefs.SetInt("PantallaCompleta", 1);
+            PlayerPrefs.Save();
+        }
+        else
+        {
+            PlayerPrefs.SetInt("PantallaCompleta", 0);
+            PlayerPrefs.Save();
+        }
+        Screen.fullScreen = pantallaCompleta.isOn;
+    }
+
+    public void CambiarResolucion(Int32 valor)
+    {
+        PlayerPrefs.SetInt("Resolucion", valor);
+        PlayerPrefs.Save();
+
+        resolucion.value = PlayerPrefs.GetInt("Resolucion");
+        Screen.SetResolution(resolucionAnchos[resolucion.value], resolucionAltos[resolucion.value], Screen.fullScreen);
     }
 }

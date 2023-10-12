@@ -48,6 +48,8 @@ public class AlimentoSpawner : MonoBehaviour
                     alimentos[i].GetComponent<AlimentoControlador>().Randomizar();
                     alimentos[i].transform.position = new Vector3(Random.Range(minPos.x, maxPos.x), Random.Range(minPos.y, maxPos.y), 0.0f);
                     numAlimentos++;
+                    maxDelay -= Time.deltaTime * Time.deltaTime; maxDelay = Mathf.Max(maxDelay, 0.0f);
+                    minDelay -= Time.deltaTime * Time.deltaTime; minDelay = Mathf.Max(minDelay, 0.0f);
                     break;
                 }
             }

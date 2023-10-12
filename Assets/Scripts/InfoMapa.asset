@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: InfoMapa
   m_EditorClassIdentifier: 
   tipoPartida: 1
-  tamanyo: 0
-  numJugadores: 10
+  tamanyo: 2
+  numJugadores: 50

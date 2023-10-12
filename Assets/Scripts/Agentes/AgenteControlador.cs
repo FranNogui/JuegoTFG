@@ -17,6 +17,17 @@ public class AgenteControlador : MonoBehaviour
         get { return margenVolumenPorcentual; }
     }
 
+    public float Velocidad
+    {
+        set { velocidad = value; }
+        get { return velocidad; }
+    }
+
+    public float VelocidadProporcional
+    {
+        get { return velocidad * tamanyoProporcion; }
+    }
+
     float probabilidadParpadeo = 0.0f;
     float incProbParpadeo = 0.001f;
     float tamanyoProporcion = 1.0f;
@@ -206,5 +217,10 @@ public class AgenteControlador : MonoBehaviour
                 objetos[i].tipo = TipoObjeto.Nada;
             }
         }
+    }
+
+    public void SeleccionarAgente()
+    {
+        controladorAgentes.SeleccionarAgente(id);
     }
 }

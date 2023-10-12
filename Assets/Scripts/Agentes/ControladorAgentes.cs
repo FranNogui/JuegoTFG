@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 
 public class ControladorAgentes : MonoBehaviour
 {
@@ -11,6 +10,7 @@ public class ControladorAgentes : MonoBehaviour
     [SerializeField] ControladorMenuOpciones controladorMenuOpciones;
     [SerializeField] ControladorCamara controladorCamara;
     int numAgentes;
+    float velocidadInicial;
     GameObject[] agentes;
 
     Vector2 minPos;
@@ -50,6 +50,8 @@ public class ControladorAgentes : MonoBehaviour
                 }
             }
         }
+
+        velocidadInicial = agentes[0].GetComponent<AgenteControlador>().Velocidad;
   
         numAgentes = info.numJugadores;
         controladorMenuOpciones.CambiarNumeroAgentes(numAgentes);
@@ -111,12 +113,34 @@ public class ControladorAgentes : MonoBehaviour
             }
             else
             {
-                Debug.Log("Eliminado");
                 agentes[idEliminado].SetActive(false);
+                AjustarVelocidades();
                 break;
             }
             yield return null;
         }
         yield return null;
+    }
+
+    private void AjustarVelocidades()
+    {
+        float minVelocidadProporcional = velocidadInicial;
+        float velocidadActual;
+        foreach (var agente in agentes)
+        {
+            if (agente.gameObject.activeSelf)
+            {
+                AgenteControlador ag = agente.GetComponent<AgenteControlador>();
+                minVelocidadProporcional = Mathf.Min(minVelocidadProporcional, ag.VelocidadProporcional);
+            }
+        }
+
+        velocidadActual = velocidadInicial / (minVelocidadProporcional / velocidadInicial);
+        foreach (var agente in agentes) agente.GetComponent<AgenteControlador>().Velocidad = velocidadActual;
+    }
+
+    public void SeleccionarAgente(int idAgente)
+    {
+        controladorCamara.ActualizarAgenteActual(agentes[idAgente], idAgente);
     }
 }

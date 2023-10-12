@@ -22,23 +22,23 @@ public class LayerControlador : MonoBehaviour
     {
         int extra = (int)(tamanyo.TamanyoActual * 10.0f);
         Base.sortingOrder = (LayerBase + extra) % valorMaxCapa;
-        Base.sortingLayerName = "Agentes" + Mathf.Min((LayerBase + extra) / valorMaxCapa, 4);
+        Base.sortingLayerName = "Agentes" + Mathf.Min((LayerBase + extra) / valorMaxCapa, NumCapas);
         Outline.sortingOrder = (LayerOutline + extra) % valorMaxCapa;
-        Outline.sortingLayerName = "Agentes" + Mathf.Min((LayerOutline + extra) / valorMaxCapa, 4);
+        Outline.sortingLayerName = "Agentes" + Mathf.Min((LayerOutline + extra) / valorMaxCapa, NumCapas);
         foreach (var ojo in Ojos)
         {
             ojo.sortingOrder = (LayerOjo + extra) % valorMaxCapa;
-            ojo.sortingLayerName = "Agentes" + Mathf.Min((LayerOjo + extra) / valorMaxCapa, 4);
+            ojo.sortingLayerName = "Agentes" + Mathf.Min((LayerOjo + extra) / valorMaxCapa, NumCapas);
         }
         foreach (var ojoOutline in OjosOutline)
         {
             ojoOutline.sortingOrder = (LayerOjoOutline + extra) % valorMaxCapa;
-            ojoOutline.sortingLayerName = "Agentes" + Mathf.Min((LayerOjoOutline + extra) / valorMaxCapa, 4);
+            ojoOutline.sortingLayerName = "Agentes" + Mathf.Min((LayerOjoOutline + extra) / valorMaxCapa, NumCapas);
         }
         foreach (var pupila in Pupilas)
         {
             pupila.sortingOrder = (LayerPupila + extra) % valorMaxCapa;
-            pupila.sortingLayerName = "Agentes" + Mathf.Min((LayerPupila + extra) / valorMaxCapa, 4);
+            pupila.sortingLayerName = "Agentes" + Mathf.Min((LayerPupila + extra) / valorMaxCapa, NumCapas);
         }
     }
 }
