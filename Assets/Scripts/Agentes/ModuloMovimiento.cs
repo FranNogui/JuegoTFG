@@ -138,7 +138,6 @@ public class ModuloMovimiento : MonoBehaviour
                         huida.Normalize();
                         vectorRandom = huida;
                         esquivandoPared = true;
-                        Debug.Log(Vector2.Angle(huida, ((peorEnemigo.posicion - transform.position) * -1.0f).normalized));
                         if (Vector2.Angle(huida, ((peorEnemigo.posicion - transform.position) * -1.0f).normalized) >= 100.0f) dirPared *= -1.0f;
                         break;
                     }            

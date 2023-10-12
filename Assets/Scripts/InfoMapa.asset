@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tipoPartida: 1
   tamanyo: 0
-  numJugadores: 50
+  numJugadores: 10

@@ -2822,7 +2822,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 105.1024, y: 50}
+  m_SizeDelta: {x: 110, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &390312834
 MonoBehaviour:
@@ -3730,7 +3730,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 105.1024, y: 50}
+  m_SizeDelta: {x: 110, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &542624006
 MonoBehaviour:
@@ -5471,6 +5471,11 @@ MonoBehaviour:
   imagenHumano: {fileID: 21300000, guid: 31913aca3136b4449ada36d77e6508b4, type: 3}
   imagenComputador: {fileID: 21300000, guid: f58123a1b4dd0054eb0b838f76ad4f37, type: 3}
   menuOpciones: {fileID: 1780683909}
+  volumenMusica: {fileID: 1149783279}
+  volumenSFX: {fileID: 1713636471}
+  musicaTexto: {fileID: 390312834}
+  SFXTexto: {fileID: 542624006}
+  mixer: {fileID: 24100000, guid: 7681c780306c76545abb36772f9241f1, type: 2}
   info: {fileID: 11400000, guid: 74caaee9c76ce764ca2984e8532bc574, type: 2}
   sliderJugadores: {fileID: 1990850786}
   pequenyo: {fileID: 1292618489}
@@ -7192,7 +7197,7 @@ GameObject:
   - component: {fileID: 1149783278}
   - component: {fileID: 1149783279}
   m_Layer: 5
-  m_Name: ScrollJugadors
+  m_Name: ScrollMusica
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7264,16 +7269,16 @@ MonoBehaviour:
   m_FillRect: {fileID: 1259061116}
   m_HandleRect: {fileID: 1972701097}
   m_Direction: 0
-  m_MinValue: 0
-  m_MaxValue: 100
-  m_WholeNumbers: 1
-  m_Value: 0
+  m_MinValue: 0.0001
+  m_MaxValue: 1
+  m_WholeNumbers: 0
+  m_Value: 0.001
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 938934991}
         m_TargetAssemblyTypeName: ControladorMenuPrincipal, Assembly-CSharp
-        m_MethodName: ActualizarNumeroJugadores
+        m_MethodName: ActualizarBarraAudioMusica
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -10862,7 +10867,7 @@ AudioSource:
   m_GameObject: {fileID: 1601910865}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -3724393805803375741, guid: 7681c780306c76545abb36772f9241f1, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 0.2
@@ -11564,7 +11569,7 @@ GameObject:
   - component: {fileID: 1713636470}
   - component: {fileID: 1713636471}
   m_Layer: 5
-  m_Name: ScrollJugadors
+  m_Name: ScrollSFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11636,16 +11641,16 @@ MonoBehaviour:
   m_FillRect: {fileID: 1439310477}
   m_HandleRect: {fileID: 649987784}
   m_Direction: 0
-  m_MinValue: 0
-  m_MaxValue: 100
-  m_WholeNumbers: 1
-  m_Value: 0
+  m_MinValue: 0.0001
+  m_MaxValue: 1
+  m_WholeNumbers: 0
+  m_Value: 0.001
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 938934991}
         m_TargetAssemblyTypeName: ControladorMenuPrincipal, Assembly-CSharp
-        m_MethodName: ActualizarNumeroJugadores
+        m_MethodName: ActualizarBarraAudioSFX
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

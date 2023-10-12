@@ -58,6 +58,29 @@ public class ControladorAgentes : MonoBehaviour
     public void EliminarAgente(int idEliminado, int idEliminador)
     {
         controladorMenuOpciones.CambiarNumeroAgentes(--numAgentes);
+
+        if ((idEliminado == 0 && info.tipoPartida == TipoPartida.JVM) || numAgentes == 1)
+        {
+            if (info.tipoPartida == TipoPartida.JVM) 
+            {
+                if (idEliminado == 0)
+                {
+                    controladorMenuOpciones.CambiarTextoFinal("¡¡Derrota!!", Color.red);
+                }
+                else
+                {
+                    controladorMenuOpciones.CambiarTextoFinal("¡¡Victoria!!", Color.green);
+                }
+            }
+            else
+            {
+                controladorMenuOpciones.CambiarTextoFinal("Fin de la partida", Color.white);
+            }
+
+
+            controladorMenuOpciones.AbrirMenuFinalPartida();
+        }
+
         if (idEliminado == controladorCamara.AgenteId)
         {
             controladorCamara.ActualizarAgenteActual(agentes[idEliminador], idEliminador);

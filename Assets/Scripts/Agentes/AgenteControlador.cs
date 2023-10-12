@@ -86,10 +86,10 @@ public class AgenteControlador : MonoBehaviour
     void Update()
     {
         if (eliminado) return;
-        movPrev = mov;
         mov = modMov.ActualizarMovimiento(objetos);
         if (mov.magnitude > 1.0f) { mov.Normalize(); }
-        mov = Vector2.Lerp(mov, movPrev, 0.5f * Time.deltaTime);
+        mov = Vector3.Lerp(mov, movPrev, 0.01f * Time.deltaTime);
+        movPrev = mov;
         ojos.ActualizarPosicion(mov);
         mov *= (velocidad * tamanyoProporcion);
         body.velocity = mov;
