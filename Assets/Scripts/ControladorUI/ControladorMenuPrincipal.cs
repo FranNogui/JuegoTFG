@@ -46,6 +46,17 @@ public class ControladorMenuPrincipal : MonoBehaviour
     [SerializeField] Toggle mediano;
     [SerializeField] Toggle grande;
 
+    [Header("Controles")]
+    [SerializeField] GameObject menuControles;
+    Animator menuControlesAnimator;
+
+    [Header("Creditos")]
+    [SerializeField] GameObject creditos;
+    Animator creditosAnimator;
+
+    [Header("Nombre de usuario")]
+    [SerializeField] TMP_InputField nombreUsuario;
+
 
     private void Start()
     {
@@ -71,6 +82,15 @@ public class ControladorMenuPrincipal : MonoBehaviour
         Screen.SetResolution(resolucionAnchos[resolucion.value], resolucionAltos[resolucion.value], Screen.fullScreen);
 
         menuOpcionesAnimator = menuOpciones.GetComponent<Animator>();
+        menuControlesAnimator = menuControles.GetComponent<Animator>();
+        creditosAnimator = creditos.GetComponent<Animator>();
+
+        if (!PlayerPrefs.HasKey("NombreJugador"))
+        {
+            PlayerPrefs.SetString("NombreJugador", "TuNick");
+            PlayerPrefs.Save();
+        }
+        nombreUsuario.text = PlayerPrefs.GetString("NombreJugador");
     }
 
     public void JugarPulsado()
@@ -176,5 +196,31 @@ public class ControladorMenuPrincipal : MonoBehaviour
 
         resolucion.value = PlayerPrefs.GetInt("Resolucion");
         Screen.SetResolution(resolucionAnchos[resolucion.value], resolucionAltos[resolucion.value], Screen.fullScreen);
+    }
+
+    public void AbrirMenuControles()
+    {
+        menuControlesAnimator.SetBool("Abierto", true);
+    }
+
+    public void CerrarMenuControles()
+    {
+        menuControlesAnimator.SetBool("Abierto", false);
+    }
+
+    public void AbrirCreditos()
+    {
+        creditosAnimator.SetBool("Abierto", true);
+    }
+
+    public void CerrarCreditos()
+    {
+        creditosAnimator.SetBool("Abierto", false);
+    }
+
+    public void ActualizarNombreUsuario(string nuevoNombre)
+    {
+        PlayerPrefs.SetString("NombreJugador", nuevoNombre);
+        PlayerPrefs.Save();
     }
 }

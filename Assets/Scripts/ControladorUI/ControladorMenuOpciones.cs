@@ -40,6 +40,9 @@ public class ControladorMenuOpciones : MonoBehaviour
     [SerializeField] GameObject botonAcelerar;
     [SerializeField] TextMeshProUGUI textoVelocidad;
 
+    [Header("Lista Top")]
+    [SerializeField] GameObject listaTop;
+
     private void Start()
     {
         menuOpcionesAnimator = menuOpciones.GetComponent<Animator>();
@@ -64,6 +67,7 @@ public class ControladorMenuOpciones : MonoBehaviour
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape)) menuOpcionesAnimator.SetBool("Abierto", !menuOpcionesAnimator.GetBool("Abierto"));
+        if (Input.GetKeyDown(KeyCode.Tab)) listaTop.SetActive(!listaTop.activeSelf);
     }
 
     public void OpcionesPulsado()

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -20,8 +21,12 @@ public class MapaControlador : MonoBehaviour
     [SerializeField] ControladorAgentes controladorAgentes;
     [SerializeField] SpriteRenderer fondo;
 
+    [SerializeField] TextMeshProUGUI contadorTexto;
+    float contador;
+
     private void Awake()
     {
+        contador = 0.0f;
         switch (info.tamanyo)
         {
             case TamanyoMapa.Pequenyo:
@@ -55,5 +60,11 @@ public class MapaControlador : MonoBehaviour
                 fondo.size = limiteMaxGrande.position - limiteMinGrande.position;
                 break;
         }
+    }
+
+    private void Update()
+    {
+        contador += Time.deltaTime;
+        contadorTexto.text = ((int)(contador / 60.0f)).ToString("00") + ":" + ((int)(contador % 60.0f)).ToString("00");
     }
 }

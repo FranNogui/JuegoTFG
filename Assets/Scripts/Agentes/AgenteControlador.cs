@@ -35,6 +35,8 @@ public class AgenteControlador : MonoBehaviour
     Vector2 movPrev;
 
     bool eliminado;
+    public bool Eliminado
+    { get { return eliminado; } }
 
     OjosControlador ojos;
     TamanyoControlador tamanyo;
@@ -43,6 +45,7 @@ public class AgenteControlador : MonoBehaviour
     Animator animator;
     ControladorSonidosAgente controladorSonidos;
     Collider2D colision;
+    NombreControlador nombre;
     
 
     float[] dirX = new float[numRayCasts];
@@ -87,6 +90,7 @@ public class AgenteControlador : MonoBehaviour
         modMov = GetComponent<ModuloMovimiento>();
         controladorSonidos = GetComponent<ControladorSonidosAgente>();
         colision = GetComponent<Collider2D>();
+        nombre = GetComponent<NombreControlador>();
         mov = Vector2.zero;
         movPrev = mov;
         eliminado = false;
@@ -97,6 +101,7 @@ public class AgenteControlador : MonoBehaviour
     void Update()
     {
         if (eliminado) return;
+        if (Input.GetKeyDown(KeyCode.Q)) nombre.CambiarEstado();
         mov = modMov.ActualizarMovimiento(objetos);
         if (mov.magnitude > 1.0f) { mov.Normalize(); }
         mov = Vector3.Lerp(mov, movPrev, 0.01f * Time.deltaTime);
@@ -147,6 +152,7 @@ public class AgenteControlador : MonoBehaviour
         eliminado = true;
         tamanyo.Eliminado = true;
         colision.enabled = false;
+        nombre.OcultarNick();
         controladorSonidos.ReproducirPop();
         controladorAgentes.EliminarAgente(id, idEliminador);
     }
