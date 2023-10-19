@@ -1,51 +1,61 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Clase encargada de controlar el ente espectador de una partida.
+/// </summary>
 public class ControlEspectador : MonoBehaviour
 {
+    [Header("Velocidades")]
+
+    [Tooltip("Velocidad de movimiento por defecto.")]
     [SerializeField] float velocidadNormal = 6.0f;
+
+    [Tooltip("Velocidad de movimiento con sprint.")]
     [SerializeField] float velocidadSprint = 12.0f;
-    float velocidad;
 
-    [SerializeField] float maxZoom   = 30.0f;
+    [Header("Zooms")]
+
+    [Tooltip("Máximo zoom que puede alcanzar la cámara.")]
+    [SerializeField] float maxZoom   = 60.0f;
+
+    [Tooltip("Mínimo zoom que debe tener la cámara.")]
     [SerializeField] float minZoom   = 3.0f;
-    Camera camara;
 
+    Camera camara;
     Rigidbody2D cuerpo;
 
-    [SerializeField] GameObject menuOpciones;
-    Animator menuOpcionesAnimator;
+    bool zoomHabilitado;
+    float velocidad;
+    Vector2 movimiento;
 
-    public bool canZoom;
-
-    private void Start()
+    void Start()
     {
         cuerpo = GetComponent<Rigidbody2D>();
         camara = Camera.main;
         velocidad = velocidadNormal;
-
-        menuOpcionesAnimator = menuOpciones.GetComponent<Animator>();
-        canZoom = true;
+        zoomHabilitado = true;
     }
 
     void Update()
     {
-        Vector2 mov = Vector2.right * Input.GetAxis("Horizontal") + Vector2.up * Input.GetAxis("Vertical");
-        if (mov.magnitude > 1.0f) mov.Normalize();
+        movimiento = Vector2.right * Input.GetAxis("Horizontal") + Vector2.up * Input.GetAxis("Vertical");
+        if (movimiento.magnitude > 1.0f) movimiento.Normalize();
 
-        if (Input.GetKey(KeyCode.LeftShift)) velocidad = velocidadSprint;
-        else velocidad = velocidadNormal;
+        velocidad = Input.GetKey(KeyCode.LeftShift) ? velocidadSprint : velocidadNormal;
 
-        cuerpo.velocity = mov * velocidad;
+        cuerpo.velocity = movimiento * velocidad;
 
-        if (Input.GetAxis("Mouse ScrollWheel") > 0f && camara.orthographicSize < maxZoom && canZoom)
-        {
+        if (zoomHabilitado && Input.GetAxis("Mouse ScrollWheel") > 0.0f && camara.orthographicSize < maxZoom)
             camara.orthographicSize++;
-        }
-        else if (Input.GetAxis("Mouse ScrollWheel") < 0f && camara.orthographicSize > minZoom && canZoom)
-        {
+        else if (zoomHabilitado && Input.GetAxis("Mouse ScrollWheel") < 0.0f && camara.orthographicSize > minZoom)
             camara.orthographicSize--;
-        }
     }
+
+    //** Getters y Setters **//
+
+    /// <summary>Booleano que controla si es posible hacer zoom con la rueda del ratón.</summary>
+    public bool ZoomHabilitado
+    { set { zoomHabilitado = value; } }
+
+    //** FIN Getters y Setters **//
 }

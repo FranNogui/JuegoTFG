@@ -1,67 +1,116 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
+/// <summary>
+/// Clase encargada de controlar la aparición de los alimentos en la partida.
+/// </summary>
 public class AlimentoSpawner : MonoBehaviour
 {
-    [SerializeField] GameObject almacenAlimentos;
-    GameObject[] alimentos;
+    [Header("Objetos necesarios")]
+
+    [Tooltip("Transform donde crear y almacenar todos los alimentos necesarios.")]
+    [SerializeField] Transform almacenAlimentos;
+
+    [Tooltip("Prefab de un alimento.")]
     [SerializeField] GameObject alimento;
-    public int maxAlimentos;
-    [SerializeField] float minDelay;
-    [SerializeField] float maxDelay;
 
-    int numAlimentos;
-    Vector2 minPos;
-    Vector2 maxPos;
+    [Header("Variables de delay")]
+    
+    [Tooltip("Mínimo tiempo que puede tardar en spawnear un alimento.")]
+    [SerializeField] float minimoDelay;
 
-    public Vector2 MinPos { set { minPos = value; } }
-    public Vector2 MaxPos { set { maxPos = value; } }
+    [Tooltip("Máximo tiempo que puede tardar en spawnear un alimento.")]
+    [SerializeField] float maximoDelay;
 
-    private void Start()
+    int maximosAlimentos;
+    int numeroAlimentos;
+    int primerAlimentoDisponible;
+    Vector2 minimaPosicion;
+    Vector2 maximaPosicion;
+
+    GameObject[]          alimentos;
+    ControladorAlimento[] alimentosAlimentoControlador;
+
+    void Start()
     {
-        alimentos = new GameObject[maxAlimentos];
-        for (int i = 0; i < maxAlimentos; i++)
+        alimentos = new GameObject[maximosAlimentos];
+        alimentosAlimentoControlador = new ControladorAlimento[maximosAlimentos];
+
+        for (int i = 0; i < maximosAlimentos; i++)
         {
-            alimentos[i] = GameObject.Instantiate(alimento);
-            alimentos[i].transform.parent = almacenAlimentos.transform;
-            alimentos[i].GetComponent<AlimentoControlador>().AlimentoSpawner = this;
-            alimentos[i].GetComponent<AlimentoControlador>().ID = i;
+            alimentos[i] = Instantiate(alimento);
+            alimentosAlimentoControlador[i] = alimentos[i].GetComponent<ControladorAlimento>();
+
+            alimentos[i].transform.parent = almacenAlimentos;
+            alimentosAlimentoControlador[i].AlimentoSpawner = this;
+            alimentosAlimentoControlador[i].ID = i;
             alimentos[i].SetActive(false);
             alimentos[i].transform.position = Vector3.zero;
         }
 
-        numAlimentos = 0;
+        primerAlimentoDisponible = 0;
+        numeroAlimentos = 0;
         StartCoroutine(SpawnearAlimento());
     }
 
+    /// <summary>
+    /// Corutina encargada de spwnear alimentos de forma periódica.
+    /// </summary>
     IEnumerator SpawnearAlimento()
     {
+        Vector3 vectorRandom = Vector3.zero;
+        float delay;
+
         while (true)
         {
-            for (int i = 0; i < maxAlimentos; i++)
+            for (int i = primerAlimentoDisponible; i < maximosAlimentos; i++)
             {
                 if (!alimentos[i].activeSelf)
                 {
                     alimentos[i].SetActive(true);
-                    alimentos[i].GetComponent<AlimentoControlador>().Randomizar();
-                    alimentos[i].transform.position = new Vector3(Random.Range(minPos.x, maxPos.x), Random.Range(minPos.y, maxPos.y), 0.0f);
-                    numAlimentos++;
-                    maxDelay -= Time.deltaTime * Time.deltaTime; maxDelay = Mathf.Max(maxDelay, 0.0f);
-                    minDelay -= Time.deltaTime * Time.deltaTime; minDelay = Mathf.Max(minDelay, 0.0f);
+                    alimentosAlimentoControlador[i].ReiniciarAlimento();
+
+                    vectorRandom.x = Random.Range(minimaPosicion.x, maximaPosicion.x);
+                    vectorRandom.y = Random.Range(minimaPosicion.y, maximaPosicion.y);
+                    alimentos[i].transform.position = vectorRandom;
+
+                    maximoDelay -= Time.deltaTime * Time.deltaTime; 
+                    maximoDelay = Mathf.Max(maximoDelay, 0.0f);
+                    minimoDelay -= Time.deltaTime * Time.deltaTime; 
+                    minimoDelay = Mathf.Max(minimoDelay, 0.0f);
+
+                    numeroAlimentos++;
+                    primerAlimentoDisponible++;
                     break;
                 }
             }
 
-            float delay = Mathf.Clamp((float) numAlimentos / maxAlimentos, 0.0f, 1.0f) * (maxDelay - minDelay) + minDelay;
+            delay = ((float) numeroAlimentos / maximosAlimentos) * (maximoDelay - minimoDelay) + minimoDelay;
             yield return new WaitForSeconds(delay);
         }
     }
 
+    /// <summary>
+    /// Método para marcar un alimento de la lista como eliminado.
+    /// </summary>
+    /// <param name="id">Identificador del alimento en este Alimento Spawner.</param>
     public void DestruirAlimento(int id)
     {
         alimentos[id].SetActive(false);
-        numAlimentos--;
+        if (id < primerAlimentoDisponible) primerAlimentoDisponible = id;
+        numeroAlimentos--;
     }
+
+    //** Getters y Setters **//
+
+    /// <summary>Vector2 que representa la esquina inferior izquierda del área donde spawnean los alimentos.</summary>
+    public Vector2 MinimaPosicion { set { minimaPosicion = value; } }
+
+    /// <summary>Vector2 que representa la esquina superior derecha del área donde spawnean los alimentos.</summary>
+    public Vector2 MaximaPosicion { set { maximaPosicion = value; } }
+
+    /// <summary>Cantidad máxima de alimentos simultáneos que pueden haber en la partida.</summary>
+    public int MaximosAlimentos { set { maximosAlimentos = value; } }
+
+    //** FIN Getters y Setters **//
 }

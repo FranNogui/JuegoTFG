@@ -677,7 +677,6 @@ GameObject:
   - component: {fileID: 6828164260443143585}
   - component: {fileID: 3817702320793826640}
   - component: {fileID: 4910839359439350377}
-  - component: {fileID: 6589080647560001037}
   m_Layer: 6
   m_Name: Agente
   m_TagString: Untagged
@@ -778,11 +777,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 5189544275510313191}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3245490e8cb596d49ba0182b692d7aae, type: 3}
+  m_Script: {fileID: 11500000, guid: c28af1d88991097468e5c9230f2e0950, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   velocidad: 6
-  decVelocidadPorTamanyo: 0.01
+  decrementoVelocidadPorTamanyo: 0.01
   distanciaVision: 5
   margenVolumenPorcentual: 1.25
 --- !u!114 &4714060416098237696
@@ -797,7 +796,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4900193c309ea8544813b51e70cca8e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tipo: 1
+  tipoAgente: 1
 --- !u!114 &4609793610021602941
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -811,9 +810,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ojos:
-  - {fileID: 5262989377216855822}
-  - {fileID: 1564597052140624071}
-  maxRadio: 5
+  - {fileID: 4584657113876622029}
+  - {fileID: 8005377189224312705}
+  maximoRadio: 5
 --- !u!114 &2927134351543236570
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -823,11 +822,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 5189544275510313191}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 452a92842f01cca409c4f565648dce5d, type: 3}
+  m_Script: {fileID: 11500000, guid: 8d78f939da8e0484ab61799bb268448c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tamanyoActual: 0
-  tamanyoPaso: 1
+  volumenActual: 1
 --- !u!114 &6698796187259631080
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -840,12 +838,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6970e49d654d6ae4c8600fb5af2cc233, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NumCapas: 4
-  LayerBase: 1
-  LayerOutline: 0
-  LayerOjo: 3
-  LayerOjoOutline: 2
-  LayerPupila: 4
+  numeroCapas: 4
   Base: {fileID: 2041553722739912425}
   Outline: {fileID: 8116018759600175957}
   Ojos:
@@ -857,7 +850,6 @@ MonoBehaviour:
   Pupilas:
   - {fileID: 5169314677750177273}
   - {fileID: 659928442436065710}
-  tamanyo: {fileID: 2927134351543236570}
 --- !u!114 &177465086065977967
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -871,7 +863,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pops:
-  - {fileID: 8300000, guid: 0234a7747e2c62e4a846720aafc15e44, type: 3}
   - {fileID: 8300000, guid: 01a9bb575352351438afcc2272a5a4a2, type: 3}
   - {fileID: 8300000, guid: 3960e94a1c253674a8728122e7848885, type: 3}
   - {fileID: 8300000, guid: 3d2094d87efbb214897ff6f0d5786382, type: 3}
@@ -933,7 +924,7 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
+  MinDistance: 4
   MaxDistance: 500
   Pan2D: 0
   rolloffMode: 0
@@ -1009,19 +1000,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &6589080647560001037
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5189544275510313191}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e61b2bee90eddb4997e48d9d6800b7c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pops: []
 --- !u!1 &5262989377216855822
 GameObject:
   m_ObjectHideFlags: 0
@@ -1228,7 +1206,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1, y: 1}
+  m_SizeDelta: {x: 0.3, y: 0.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &6291274328177821808
 Canvas:
@@ -1480,7 +1458,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1, y: 1}
+  m_SizeDelta: {x: 0.48, y: 0.48}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8352869185990954777
 CanvasRenderer:
@@ -1510,8 +1488,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: 55f7dfc0e7214d7468018eb1438ba472, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4

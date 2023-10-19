@@ -1,9 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
@@ -11,8 +7,8 @@ using UnityEngine.UI;
 
 public class ControladorMenuPrincipal : MonoBehaviour
 {
-    int[] resolucionAnchos = { 640, 1280, 1366, 1600, 1920, 2560, 3200, 3840, 5120, 7680 };
-    int[] resolucionAltos = { 360, 720, 768, 900, 1080, 1440, 1800, 2160, 2880, 4320 };
+    readonly int[] resolucionAnchos = { 640, 1280, 1366, 1600, 1920, 2560, 3200, 3840, 5120, 7680 };
+    readonly int[] resolucionAltos  = { 360, 720, 768, 900, 1080, 1440, 1800, 2160, 2880, 4320 };
 
     [Header("Menu de juego")]
     [SerializeField] GameObject menuJugar;
@@ -58,7 +54,7 @@ public class ControladorMenuPrincipal : MonoBehaviour
     [SerializeField] TMP_InputField nombreUsuario;
 
 
-    private void Start()
+    void Start()
     {
         Time.timeScale = 1.0f;
         menuJugarAnimator  = menuJugar.GetComponent<Animator>();
@@ -125,7 +121,7 @@ public class ControladorMenuPrincipal : MonoBehaviour
         menuJugarOpciones1.SetActive(false);
         menuJugarOpciones2.SetActive(true);
         imagenElegido.sprite = imagenHumano;
-        info.tipoPartida = TipoPartida.JVM;
+        info.tipoPartida = TipoPartida.JugadorVSMaquina;
     }
 
     public void MaquinaContraMaquinaPulsado()
@@ -133,7 +129,7 @@ public class ControladorMenuPrincipal : MonoBehaviour
         menuJugarOpciones1.SetActive(false);
         menuJugarOpciones2.SetActive(true);
         imagenElegido.sprite = imagenComputador;
-        info.tipoPartida = TipoPartida.MVM;
+        info.tipoPartida = TipoPartida.MaquinaVSMaquina;
     }
 
     public void ActualizarNumeroJugadores(float nuevoNumero)
@@ -169,7 +165,7 @@ public class ControladorMenuPrincipal : MonoBehaviour
         else if (mediano.isOn)  info.tamanyo = TamanyoMapa.Mediano;
         else if (grande.isOn)   info.tamanyo = TamanyoMapa.Grande;
 
-        info.numJugadores = (int) sliderJugadores.value;
+        info.numeroJugadores = (int) sliderJugadores.value;
 
         SceneManager.LoadScene("EscenaJuego");
     }

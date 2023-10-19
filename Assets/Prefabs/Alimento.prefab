@@ -169,12 +169,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d468b7ac50e9cc6438fcbb287eb0d607, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  alimento: {fileID: 4003022415742716993}
-  render: {fileID: 3752561873739095934}
-  volumenMinimo: 0.1
+  volumenMinimo: 0.5
   volumenMaximo: 1
-  tamanyoPaso: 0.1
-  volumen: 1
 --- !u!114 &8700034225281081977
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -188,7 +184,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pops:
-  - {fileID: 8300000, guid: 0234a7747e2c62e4a846720aafc15e44, type: 3}
   - {fileID: 8300000, guid: 01a9bb575352351438afcc2272a5a4a2, type: 3}
   - {fileID: 8300000, guid: 3960e94a1c253674a8728122e7848885, type: 3}
   - {fileID: 8300000, guid: 3d2094d87efbb214897ff6f0d5786382, type: 3}
@@ -216,7 +211,7 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
+  MinDistance: 4
   MaxDistance: 500
   Pan2D: 0
   rolloffMode: 0

@@ -1,11 +1,10 @@
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 public class ControladorAgentes : MonoBehaviour
 {
-    [SerializeField] GameObject almacenAgentes;
+    [SerializeField] Transform almacenAgentes;
     [SerializeField] InformacionMapa info;
     [SerializeField] GameObject[] tiposDeAgente;
     [SerializeField] ControladorMenuOpciones controladorMenuOpciones;
@@ -26,19 +25,20 @@ public class ControladorAgentes : MonoBehaviour
     public Vector2 MinPos { set { minPos = value; } }
     public Vector2 MaxPos { set { maxPos = value; } }
 
-    public void Update()
+    void LateUpdate()
     {
         ActualizarTop();
+        AjustarVelocidades();
     }
 
     void ActualizarTop()
     {
-        for (int i = 0; i < info.numJugadores; i++)
+        for (int i = 0; i < info.numeroJugadores; i++)
         {
-            tamanyosActuales[i] = agentes[i].GetComponent<AgenteControlador>().Volumen;
+            tamanyosActuales[i] = agentes[i].GetComponent<ControladorAgente>().Volumen;
         }
 
-        for (int i = 0; i < info.numJugadores; i++)
+        for (int i = 0; i < info.numeroJugadores; i++)
         {
             int j = i;
             while (j > 0 && tamanyosActuales[topPos[j]] > tamanyosActuales[topPos[j - 1]])
@@ -49,49 +49,49 @@ public class ControladorAgentes : MonoBehaviour
             }
         }
 
-        for (int i = 0; i < info.numJugadores; i++)
+        for (int i = 0; i < info.numeroJugadores; i++)
         {
             topNicks[topPos[i]].SetActive(true);
             topNicks[topPos[i]].transform.SetParent(topLista[Mathf.Min(i, topLista.Length - 1)].transform, true);
             topNicks[topPos[i]].GetComponent<RectTransform>().offsetMax = new Vector2(0, 0);
             topNicks[topPos[i]].GetComponent<RectTransform>().offsetMin = new Vector2(0, 0);
-            topNicks[topPos[i]].GetComponent<TextMeshProUGUI>().text = System.String.Format("{0,-15} : {1:.00}", agentes[topPos[i]].GetComponent<NombreControlador>().Nombre(), tamanyosActuales[topPos[i]].ToString(".00"));
-            if (agentes[topPos[i]].GetComponent<AgenteControlador>().Eliminado) topNicks[topPos[i]].GetComponent<TextMeshProUGUI>().color = Color.red;
+            topNicks[topPos[i]].GetComponent<TextMeshProUGUI>().text = System.String.Format("{0,-15} : {1:.00}", agentes[topPos[i]].GetComponent<ControladorNombre>().Nombre(), tamanyosActuales[topPos[i]].ToString(".00"));
+            if (agentes[topPos[i]].GetComponent<ControladorAgente>().Eliminado) topNicks[topPos[i]].GetComponent<TextMeshProUGUI>().color = Color.red;
             if (i >= topLista.Length - 1) topNicks[topPos[i]].SetActive(false);
         }
     }
 
-    private void Start()
+    void Start()
     {
-        topNicks = new GameObject[info.numJugadores];
-        tamanyosActuales = new float[info.numJugadores];
-        topPos = new int[info.numJugadores];
-        agentes = new GameObject[info.numJugadores];
+        topNicks = new GameObject[info.numeroJugadores];
+        tamanyosActuales = new float[info.numeroJugadores];
+        topPos = new int[info.numeroJugadores];
+        agentes = new GameObject[info.numeroJugadores];
         for (int i = 0; i < agentes.Length; i++)
         {
             agentes[i] = Instantiate(tiposDeAgente[Random.Range(0, tiposDeAgente.Length)]);
-            agentes[i].GetComponent<AgenteControlador>().RandomizarColor();
-            agentes[i].GetComponent<AgenteControlador>().ID = i;
-            agentes[i].GetComponent<AgenteControlador>().ControladorAgentes = this;
-            agentes[i].GetComponent<NombreControlador>().EstablecerNombre("Bot " + i);
+            agentes[i].GetComponent<ControladorAgente>().RandomizarColor();
+            agentes[i].GetComponent<ControladorAgente>().ID = i;
+            agentes[i].GetComponent<ControladorAgente>().ControladorAgentes = this;
+            agentes[i].GetComponent<ControladorNombre>().EstablecerNombre("Bot " + i);
             topNicks[i] = Instantiate(topNick);
             topNicks[i].transform.SetParent(topLista[Mathf.Min(i, topLista.Length - 1)].transform, true);
             topNicks[i].GetComponent<RectTransform>().offsetMax = new Vector2(0, 0);
             topNicks[i].GetComponent<RectTransform>().offsetMin = new Vector2(0, 0);
-            topNicks[i].GetComponent<TextMeshProUGUI>().text = agentes[i].GetComponent<NombreControlador>().Nombre() + ": 1,00";
+            topNicks[i].GetComponent<TextMeshProUGUI>().text = agentes[i].GetComponent<ControladorNombre>().Nombre() + ": 1,00";
             topNicks[i].transform.localScale = Vector3.one;
             topPos[i] = i;
             if (i >= topLista.Length - 1) topNicks[i].SetActive(false);
             agentes[i].transform.parent = almacenAgentes.transform;
         }
-        if (info.tipoPartida == TipoPartida.JVM)
+        if (info.tipoPartida == TipoPartida.JugadorVSMaquina)
         { 
             agentes[0].GetComponent<ModuloMovimiento>().CambiarA(TipoAgente.Jugador);
-            agentes[0].GetComponent<NombreControlador>().EstablecerNombre(PlayerPrefs.GetString("NombreJugador"));
-            controladorCamara.ActualizarAgenteActual(agentes[0], 0);
+            agentes[0].GetComponent<ControladorNombre>().EstablecerNombre(PlayerPrefs.GetString("NombreJugador"));
+            controladorCamara.ActualizarAgenteActual(agentes[0].transform, 0);
         }
         
-        for (int i = 0; i < info.numJugadores; i++) 
+        for (int i = 0; i < info.numeroJugadores; i++) 
         {
             bool valido = false;
             while (!valido)
@@ -106,9 +106,9 @@ public class ControladorAgentes : MonoBehaviour
             }
         }
 
-        velocidadInicial = agentes[0].GetComponent<AgenteControlador>().Velocidad;
+        velocidadInicial = agentes[0].GetComponent<ControladorAgente>().Velocidad;
   
-        numAgentes = info.numJugadores;
+        numAgentes = info.numeroJugadores;
         controladorMenuOpciones.CambiarNumeroAgentes(numAgentes);
     }
 
@@ -116,9 +116,9 @@ public class ControladorAgentes : MonoBehaviour
     {
         controladorMenuOpciones.CambiarNumeroAgentes(--numAgentes);
 
-        if ((idEliminado == 0 && info.tipoPartida == TipoPartida.JVM) || numAgentes == 1)
+        if ((idEliminado == 0 && info.tipoPartida == TipoPartida.JugadorVSMaquina) || numAgentes == 1)
         {
-            if (info.tipoPartida == TipoPartida.JVM) 
+            if (info.tipoPartida == TipoPartida.JugadorVSMaquina) 
             {
                 if (idEliminado == 0)
                 {
@@ -140,7 +140,7 @@ public class ControladorAgentes : MonoBehaviour
 
         if (idEliminado == controladorCamara.AgenteId)
         {
-            controladorCamara.ActualizarAgenteActual(agentes[idEliminador], idEliminador);
+            controladorCamara.ActualizarAgenteActual(agentes[idEliminador].transform, idEliminador);
         }
         StartCoroutine(EliminarAgenteCorutina(idEliminado, idEliminador)); 
     }
@@ -169,7 +169,6 @@ public class ControladorAgentes : MonoBehaviour
             else
             {
                 agentes[idEliminado].SetActive(false);
-                AjustarVelocidades();
                 break;
             }
             yield return null;
@@ -177,34 +176,35 @@ public class ControladorAgentes : MonoBehaviour
         yield return null;
     }
 
-    private void AjustarVelocidades()
+    void AjustarVelocidades()
     {
-        float minVelocidadProporcional = velocidadInicial;
+        float maxVelocidadProporcional = 0.0f;
         float velocidadActual;
+
         foreach (var agente in agentes)
         {
-            if (agente.gameObject.activeSelf)
+            if (agente.activeSelf)
             {
-                AgenteControlador ag = agente.GetComponent<AgenteControlador>();
-                minVelocidadProporcional = Mathf.Min(minVelocidadProporcional, ag.VelocidadProporcional);
+                ControladorAgente ag = agente.GetComponent<ControladorAgente>();
+                maxVelocidadProporcional = Mathf.Max(maxVelocidadProporcional, ag.VelocidadProporcional);
             }
         }
 
-        velocidadActual = velocidadInicial / (minVelocidadProporcional / velocidadInicial);
-        foreach (var agente in agentes) agente.GetComponent<AgenteControlador>().Velocidad = velocidadActual;
+        velocidadActual = velocidadInicial / (maxVelocidadProporcional / velocidadInicial);
+        foreach (var agente in agentes) agente.GetComponent<ControladorAgente>().Velocidad = velocidadActual;
     }
 
     public void SeleccionarAgente(int idAgente)
     {
-        if (info.tipoPartida == TipoPartida.MVM)
-            controladorCamara.ActualizarAgenteActual(agentes[idAgente], idAgente);
+        if (info.tipoPartida == TipoPartida.MaquinaVSMaquina)
+            controladorCamara.ActualizarAgenteActual(agentes[idAgente].transform, idAgente);
     }
 
     public void SeleccionarAgenteTOP(int top)
     {
         int agente = topPos[top];
 
-        if (info.tipoPartida == TipoPartida.MVM && !agentes[agente].GetComponent<AgenteControlador>().Eliminado)
+        if (info.tipoPartida == TipoPartida.MaquinaVSMaquina && !agentes[agente].GetComponent<ControladorAgente>().Eliminado)
         {
             SeleccionarAgente(agente);
         }

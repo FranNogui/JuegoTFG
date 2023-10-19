@@ -1,60 +1,85 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Clase encargada de controlar el comportamiento global de la cámara durante una partida.
+/// </summary>
 public class ControladorCamara : MonoBehaviour
 {
-    [SerializeField] GameObject enteEspectador;
-    GameObject agenteActual;   
-    [SerializeField] InformacionMapa info;
+    [Header("Elementos Necesarios")]
+
+    [Tooltip("Objeto controlado mientras se especta la partida.")]
+    [SerializeField] Transform enteEspectador;
+
+    [Tooltip("ScriptableObject con la información de la partida.")]
+    [SerializeField] InformacionMapa informacionMapa;
+
+    Transform agenteActual;
+    ControlEspectador controlEspectador;
+    Camera camara;
+    Transform camaraPosicion;
+    Vector3 posicionAgente;
 
     int agenteId;
-    public int AgenteId
-    {
-        get { return agenteId; }
-    }
-
+    
     public void Start()
     {
         agenteId = -1;
-        if (info.tipoPartida == TipoPartida.JVM)
-        { enteEspectador.GetComponent<ControlEspectador>().canZoom = false; }
+        controlEspectador = enteEspectador.gameObject.GetComponent<ControlEspectador>();
+        camara = Camera.main;
+        camaraPosicion = camara.transform;
+        posicionAgente = Vector3.zero;
+        if (informacionMapa.tipoPartida == TipoPartida.JugadorVSMaquina)
+        { controlEspectador.ZoomHabilitado = false; }
     }
 
-    private void FixedUpdate()
+    void FixedUpdate()
     {
-        if (info.tipoPartida == TipoPartida.MVM)
+        if (informacionMapa.tipoPartida == TipoPartida.MaquinaVSMaquina)
         {
             if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.A))
             { 
                 agenteActual = null;
                 agenteId = -1;
             }
-                
-
             if (agenteActual != null)
             {
-                Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, new Vector3(agenteActual.transform.position.x, agenteActual.transform.position.y, -10), 0.2f);
-                Camera.main.orthographicSize = Mathf.Lerp(Camera.main.orthographicSize, agenteActual.transform.localScale.x + 5.0f, 1.0f * Time.deltaTime);
-                enteEspectador.transform.position = Camera.main.transform.position;
-                enteEspectador.GetComponent<ControlEspectador>().canZoom = false;
+                CamaraAAgente();
+                enteEspectador.position = camaraPosicion.position;
+                controlEspectador.ZoomHabilitado = false;
             }
             else
             {
-                Camera.main.transform.position = new Vector3(enteEspectador.transform.position.x, enteEspectador.transform.position.y, -10);
-                enteEspectador.GetComponent<ControlEspectador>().canZoom = true;
+                camaraPosicion.position = enteEspectador.position;
+                controlEspectador.ZoomHabilitado = true;
             }
         }
-        else
-        {
-            Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, new Vector3(agenteActual.transform.position.x, agenteActual.transform.position.y, -10), 0.2f);
-            Camera.main.orthographicSize = Mathf.Lerp(Camera.main.orthographicSize, agenteActual.transform.localScale.x + 5.0f, 1.0f * Time.deltaTime);
-        }
+        else CamaraAAgente();
     }
 
-    public void ActualizarAgenteActual(GameObject nuevoAgente, int nuevoId)
+    /// <summary>
+    /// Método que mueve la cámara hacia la posición del agente de forma interpolada.
+    /// </summary>
+    void CamaraAAgente()
     {
-        agenteActual = nuevoAgente;
-        agenteId = nuevoId;
+        posicionAgente = agenteActual.position;
+        posicionAgente.z = -10;
+        camaraPosicion.position = Vector3.Lerp(camaraPosicion.position, posicionAgente, 0.2f);
+        camara.orthographicSize = Mathf.Lerp(camara.orthographicSize, agenteActual.localScale.x + 5.0f, 1.0f * Time.deltaTime);
     }
+
+    /// <summary>
+    /// Método para establecer el agente que seguirá la cámara.
+    /// </summary>
+    /// <param name="nuevoAgente">Transform del agente a seguir.</param>
+    /// <param name="nuevoId">Identificador del agente dentro del Controlador de Agentes.</param>
+    public void ActualizarAgenteActual(Transform nuevoAgente, int nuevoId)
+    { agenteActual = nuevoAgente; agenteId = nuevoId; }
+
+    //** Getters y Setters **//
+
+    /// <summary>ID del agente que sigue la cámara.</summary>
+    public int AgenteId
+    { get { return agenteId; } }
+
+    //** FIN Getters y Setters **//
 }

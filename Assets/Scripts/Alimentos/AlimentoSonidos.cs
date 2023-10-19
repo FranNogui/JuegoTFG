@@ -1,17 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Módulo del alimento encargado de controlar los sonidos.
+/// </summary>
 public class AlimentoSonidos : MonoBehaviour
 {
+    [Tooltip("Lista de sonidos de diferentes \'pop\'.")]
     [SerializeField] AudioClip[] pops;
+
     AudioSource reproductor;
 
-    private void Start()
-    {
-        reproductor = GetComponent<AudioSource>();
-    }
+    void Start()
+    { reproductor = GetComponent<AudioSource>(); }
 
+    /// <summary>
+    /// Método para reproducir un 'pop' aleatorio.
+    /// </summary>
     public void ReproducirPop()
     {
         reproductor.clip = pops[Random.Range(0, pops.Length)];

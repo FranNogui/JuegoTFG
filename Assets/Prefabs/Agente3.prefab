@@ -61,6 +61,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4609793610021602941, guid: 2de2fc23e4116fd47bed6937ef15fa99, type: 3}
+      propertyPath: ojos.Array.data[0]
+      value: 
+      objectReference: {fileID: 666239974976006215}
+    - target: {fileID: 4609793610021602941, guid: 2de2fc23e4116fd47bed6937ef15fa99, type: 3}
       propertyPath: ojos.Array.data[1]
       value: 
       objectReference: {fileID: 0}
@@ -159,3 +163,8 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2de2fc23e4116fd47bed6937ef15fa99, type: 3}
+--- !u!4 &666239974976006215 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4584657113876622029, guid: 2de2fc23e4116fd47bed6937ef15fa99, type: 3}
+  m_PrefabInstance: {fileID: 3936441709571424906}
+  m_PrefabAsset: {fileID: 0}

@@ -1,18 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Clase encargada de manejar los sonidos que pueden reproducir los menús.
+/// </summary>
 public class MenuSonidos : MonoBehaviour
 {
     AudioSource reproductor;
 
-    private void Start()
-    {
-        reproductor = GetComponent<AudioSource>();
-    }
+    void Start()
+    { reproductor = GetComponent<AudioSource>(); }
 
+    /// <summary>
+    /// Método para reproducir un sonido de "woosh".
+    /// </summary>
     public void ReproducirWhoosh()
-    {
-        reproductor.Play();
-    }
+    { reproductor.Play(); }
 }

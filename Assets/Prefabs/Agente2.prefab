@@ -28,6 +28,10 @@ PrefabInstance:
       propertyPath: ojos.Array.size
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4609793610021602941, guid: 2de2fc23e4116fd47bed6937ef15fa99, type: 3}
+      propertyPath: ojos.Array.data[0]
+      value: 
+      objectReference: {fileID: 356025214464656489}
     - target: {fileID: 5189544275510313191, guid: 2de2fc23e4116fd47bed6937ef15fa99, type: 3}
       propertyPath: m_Name
       value: Agente2
@@ -111,3 +115,8 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2de2fc23e4116fd47bed6937ef15fa99, type: 3}
+--- !u!4 &356025214464656489 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4584657113876622029, guid: 2de2fc23e4116fd47bed6937ef15fa99, type: 3}
+  m_PrefabInstance: {fileID: 4282679502320627364}
+  m_PrefabAsset: {fileID: 0}

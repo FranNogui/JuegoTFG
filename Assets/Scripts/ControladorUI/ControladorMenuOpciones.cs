@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -9,9 +7,9 @@ using UnityEngine.UI;
 
 public class ControladorMenuOpciones : MonoBehaviour
 {
-    int[] resolucionAnchos = { 640, 1280, 1366, 1600, 1920, 2560, 3200, 3840, 5120, 7680 };
-    int[] resolucionAltos = { 360, 720, 768, 900, 1080, 1440, 1800, 2160, 2880, 4320 };
-    float[] velocidadPartida = { 1.0f, 1.5f, 2.0f, 2.5f, 3.0f };
+    readonly int[] resolucionAnchos   = { 640, 1280, 1366, 1600, 1920, 2560, 3200, 3840, 5120, 7680 };
+    readonly int[] resolucionAltos    = { 360, 720, 768, 900, 1080, 1440, 1800, 2160, 2880, 4320 };
+    readonly float[] velocidadPartida = { 1.0f, 1.5f, 2.0f, 2.5f, 3.0f };
     int velocidadPartidaActual = 0;
 
     [Header("Informacion de la partida")]
@@ -43,7 +41,7 @@ public class ControladorMenuOpciones : MonoBehaviour
     [Header("Lista Top")]
     [SerializeField] GameObject listaTop;
 
-    private void Start()
+    void Start()
     {
         menuOpcionesAnimator = menuOpciones.GetComponent<Animator>();
 
@@ -61,10 +59,10 @@ public class ControladorMenuOpciones : MonoBehaviour
         resolucion.value = PlayerPrefs.GetInt("Resolucion");
         Screen.SetResolution(resolucionAnchos[resolucion.value], resolucionAltos[resolucion.value], Screen.fullScreen);
 
-        if (info.tipoPartida == TipoPartida.JVM) botonAcelerar.SetActive(false);
+        if (info.tipoPartida == TipoPartida.JugadorVSMaquina) botonAcelerar.SetActive(false);
     }
 
-    private void Update()
+    void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape)) menuOpcionesAnimator.SetBool("Abierto", !menuOpcionesAnimator.GetBool("Abierto"));
         if (Input.GetKeyDown(KeyCode.Tab)) listaTop.SetActive(!listaTop.activeSelf);
@@ -108,6 +106,7 @@ public class ControladorMenuOpciones : MonoBehaviour
     public void AbrirMenuFinalPartida()
     {
         menuFinalPartida.SetActive(true);
+        Time.timeScale = 1.0f;
     }
 
     public void CambiarTextoFinal(string textoFinal, Color color)
